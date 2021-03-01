@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
@@ -190,6 +190,8 @@ namespace RG2.Logic
                 CustomerLogic.Start(sb);
                 OrderLogic.Start(sb);
                 ShipperLogic.Start(sb);
+                ItemLogic.Start(sb);
+                ItemCategoryLogic.Start(sb);
 
                 StartRG2Configuration(sb);
 

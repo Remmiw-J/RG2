@@ -1,18 +1,16 @@
-﻿//////////////////////////////////
+//////////////////////////////////
 //Auto-generated. Do NOT modify!//
 //////////////////////////////////
 
 import { MessageKey, QueryKey, Type, EnumType, registerSymbol } from '../../../Framework/Signum.React/Scripts/Reflection'
 import * as Entities from '../../../Framework/Signum.React/Scripts/Signum.Entities'
 import * as Mailing from '../../../Extensions/Signum.React.Extensions/Mailing/Signum.Entities.Mailing'
-import * as SMS from '../../../Extensions/Signum.React.Extensions/SMS/Signum.Entities.SMS'
 import * as Authorization from '../../../Extensions/Signum.React.Extensions/Authorization/Signum.Entities.Authorization'
 import * as Workflow from '../../../Extensions/Signum.React.Extensions/Workflow/Signum.Entities.Workflow'
 import * as Files from '../../../Extensions/Signum.React.Extensions/Files/Signum.Entities.Files'
 import * as Basics from '../../../Extensions/Signum.React.Extensions/Basics/Signum.Entities.Basics'
 import * as Processes from '../../../Extensions/Signum.React.Extensions/Processes/Signum.Entities.Processes'
 import * as Scheduler from '../../../Extensions/Signum.React.Extensions/Scheduler/Signum.Entities.Scheduler'
-import * as MachineLearning from '../../../Extensions/Signum.React.Extensions/MachineLearning/Signum.Entities.MachineLearning'
 
 
 
@@ -46,7 +44,6 @@ export interface ApplicationConfigurationEntity extends Entities.Entity {
   databaseName: string;
   email: Mailing.EmailConfigurationEmbedded;
   emailSender: Mailing.EmailSenderConfigurationEntity;
-  sms: SMS.SMSConfigurationEmbedded;
   authTokens: Authorization.AuthTokenConfigurationEmbedded;
   webAuthn: Authorization.WebAuthnConfigurationEmbedded;
   workflow: Workflow.WorkflowConfigurationEmbedded;
@@ -136,11 +133,34 @@ export module EmployeeQuery {
 export const FoldersConfigurationEmbedded = new Type<FoldersConfigurationEmbedded>("FoldersConfigurationEmbedded");
 export interface FoldersConfigurationEmbedded extends Entities.EmbeddedEntity {
   Type: "FoldersConfigurationEmbedded";
-  predictorModelFolder: string;
   exceptionsFolder: string;
   operationLogFolder: string;
   viewLogFolder: string;
   emailMessageFolder: string;
+}
+
+export const Item = new Type<Item>("Item");
+export interface Item extends Entities.Entity {
+  Type: "Item";
+  createdOn: string;
+  description: string | null;
+  name: string;
+  itemCatagories: Entities.MList<ItemCategory>;
+}
+
+export const ItemCategory = new Type<ItemCategory>("ItemCategory");
+export interface ItemCategory extends Entities.Entity {
+  Type: "ItemCategory";
+  name: string;
+  item: Entities.Lite<Item> | null;
+}
+
+export module ItemCategoryOperation {
+  export const Save : Entities.ExecuteSymbol<ItemCategory> = registerSymbol("Operation", "ItemCategoryOperation.Save");
+}
+
+export module ItemOperation {
+  export const Save : Entities.ExecuteSymbol<Item> = registerSymbol("Operation", "ItemOperation.Save");
 }
 
 export const OrderDetailEmbedded = new Type<OrderDetailEmbedded>("OrderDetailEmbedded");
@@ -251,10 +271,6 @@ export module ProductOperation {
   export const Save : Entities.ExecuteSymbol<ProductEntity> = registerSymbol("Operation", "ProductOperation.Save");
 }
 
-export module ProductPredictorPublication {
-  export const MonthlySales : MachineLearning.PredictorPublicationSymbol = registerSymbol("PredictorPublication", "ProductPredictorPublication.MonthlySales");
-}
-
 export module ProductQuery {
   export const CurrentProducts = new QueryKey("ProductQuery", "CurrentProducts");
 }
@@ -269,6 +285,12 @@ export module RegionOperation {
   export const Save : Entities.ExecuteSymbol<RegionEntity> = registerSymbol("Operation", "RegionOperation.Save");
 }
 
+export module RG2Group {
+  export const UserEntities : Basics.TypeConditionSymbol = registerSymbol("TypeCondition", "RG2Group.UserEntities");
+  export const RoleEntities : Basics.TypeConditionSymbol = registerSymbol("TypeCondition", "RG2Group.RoleEntities");
+  export const CurrentCustomer : Basics.TypeConditionSymbol = registerSymbol("TypeCondition", "RG2Group.CurrentCustomer");
+}
+
 export const ShipperEntity = new Type<ShipperEntity>("Shipper");
 export interface ShipperEntity extends Entities.Entity {
   Type: "Shipper";
@@ -278,12 +300,6 @@ export interface ShipperEntity extends Entities.Entity {
 
 export module ShipperOperation {
   export const Save : Entities.ExecuteSymbol<ShipperEntity> = registerSymbol("Operation", "ShipperOperation.Save");
-}
-
-export module RG2Group {
-  export const UserEntities : Basics.TypeConditionSymbol = registerSymbol("TypeCondition", "RG2Group.UserEntities");
-  export const RoleEntities : Basics.TypeConditionSymbol = registerSymbol("TypeCondition", "RG2Group.RoleEntities");
-  export const CurrentCustomer : Basics.TypeConditionSymbol = registerSymbol("TypeCondition", "RG2Group.CurrentCustomer");
 }
 
 export const SupplierEntity = new Type<SupplierEntity>("Supplier");

@@ -1,4 +1,4 @@
-﻿import * as React from 'react'
+import * as React from 'react'
 import { CategoryEntity } from '../RG2.Entities'
 import { ValueLine, TypeContext } from '@framework/Lines'
 import { FileLine } from '@extensions/Files/FileLine'
