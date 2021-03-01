@@ -32,3 +32,13 @@ _ReSharper*/
 packages/*
 !packages/repositories.config
 .vs/
+RG2.React/node_modules/*
+RG2.React/dist/*
+RG2.React/Translations/*
+RG2.React/CodeGen/*
+/RG2.React/wwwroot/dist/*
+/RG2.React/web.config
+/RG2.React/ts_out/*
+/RG2.React/TensorFlowModels/**
+RG2.Web/Translations
+RG2.Web/Scripts/**/*.js

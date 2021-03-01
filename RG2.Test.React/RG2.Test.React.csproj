@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>nullable</WarningsAsErrors>
+    <UserSecretsId>RG2</UserSecretsId>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
+    <PackageReference Include="Signum.Analyzer" Version="2.7.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Selenium.Chrome.WebDriver" Version="85.0.0" />
+    <PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Extensions\Signum.Engine.Extensions\Signum.Engine.Extensions.csproj" />
+    <ProjectReference Include="..\Extensions\Signum.Entities.Extensions\Signum.Entities.Extensions.csproj" />
+    <ProjectReference Include="..\Extensions\Signum.React.Extensions.Selenium\Signum.React.Extensions.Selenium.csproj" />
+    <ProjectReference Include="..\Framework\Signum.Entities\Signum.Entities.csproj" />
+    <ProjectReference Include="..\Framework\Signum.Engine\Signum.Engine.csproj" />
+    <ProjectReference Include="..\Framework\Signum.Utilities\Signum.Utilities.csproj" />
+    <ProjectReference Include="..\RG2.Entities\RG2.Entities.csproj" />
+    <ProjectReference Include="..\RG2.Logic\RG2.Logic.csproj" />
+    <ProjectReference Include="..\RG2.Test.Environment\RG2.Test.Environment.csproj" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+</Project>

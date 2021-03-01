@@ -1,0 +1,102 @@
+﻿variables:
+  GIT_SUBMODULE_STRATEGY: normal
+
+stages:
+  - deploy
+  - testLogic
+  - testUI
+
+dev-deploy:
+  environment:
+     name: DEV
+     url: http://dev.r-g2.firm/
+  stage: deploy
+  variables:
+    ASPNETCORE_ENVIRONMENT: Dev
+  script:
+    - cd RG2.React/; yarn install --ignore-optional; cd ..
+    - dotnet build RG2.sln /p:Configuration=Release /p:Platform=x64 /p:VisualStudioVersion=15.0 /m
+    - cd RG2.React/; yarn run build; cd ..
+    - dotnet publish RG2.React/RG2.React.csproj -c Release --runtime win7-x64 /p:EnableMSDeployAppOffline=true /p:PublishProfile=Dev /p:Username=$env:MSBUILD_USER /p:Password=$env:MSBUILD_PASSWORD /v:normal
+    - dotnet test RG2.Test.Environment/RG2.Test.Environment.csproj -c Release
+  tags:
+    - desrv148
+  except: 
+    - TEST
+    - LIVE
+
+unit-tests-logic:
+  environment:
+     name: DEV
+     url: http://dev.r-g2.firm/
+  stage: testLogic
+  variables:
+    ASPNETCORE_ENVIRONMENT: Dev
+  script:
+  - dotnet test RG2.Test.Logic/RG2.Test.Logic.csproj -c Release
+  allow_failure: true
+  tags:
+    - desrv148
+  except: 
+    - TEST
+    - LIVE
+
+unit-tests-ui:
+  environment:
+     name: DEV
+     url: http://dev.r-g2.firm/
+  stage: testUI
+  variables:
+    ASPNETCORE_ENVIRONMENT: dev
+  script:
+    - dotnet test RG2.Test.React/RG2.Test.React.csproj -c Release
+  allow_failure: true
+  tags:
+    - desrv148
+  except: 
+    - TEST
+    - LIVE
+
+test-deploy:
+  environment:
+    name: TEST
+    url: http://test.r-g2.firm
+  stage: deploy
+  variables:
+    ASPNETCORE_ENVIRONMENT: test
+  script:
+    - cd RG2.React/; yarn install --ignore-optional; cd ..
+    - dotnet build RG2.sln /p:Configuration=Release /p:Platform=x64 /p:VisualStudioVersion=15.0 /m
+    - cd RG2.React/; yarn run build; cd ..
+    - dotnet publish RG2.React/RG2.React.csproj -c Release --runtime win7-x64 /p:EnableMSDeployAppOffline=true /p:PublishProfile=Test /p:Username=$env:MSBUILD_USER /p:Password=$env:MSBUILD_PASSWORD /v:m
+    - cd RG2.Load/bin/Release/netcoreapp2.1/
+    - dotnet RG2.Load.dll sql
+    - dotnet RG2.Load.dll csharp
+    - dotnet RG2.Load.dll auth
+    - cd ../../../..
+  tags:
+    - desrv148
+  only: 
+    - TEST
+
+live-deploy:
+  environment:
+    name: LIVE
+    url: http://live.r-g2.firm
+  stage: deploy
+  variables:
+    ASPNETCORE_ENVIRONMENT: live
+  script:
+    - cd RG2.React/; yarn install --ignore-optional; cd ..
+    - dotnet build RG2.sln /p:Configuration=Release /p:Platform=x64 /p:VisualStudioVersion=15.0 /m
+    - cd RG2.React/; yarn run build; cd ..
+    - dotnet publish RG2.React/RG2.React.csproj -c Release --runtime win7-x64 /p:EnableMSDeployAppOffline=true /p:PublishProfile=Live /p:Username=$env:MSBUILD_USER /p:Password=$env:MSBUILD_PASSWORD /v:m
+    - cd RG2.Load/bin/Release/netcoreapp2.1/
+    - dotnet RG2.Load.dll sql
+    - dotnet RG2.Load.dll csharp
+    - dotnet RG2.Load.dll auth
+    - cd ../../../..
+  tags:
+    - desrv148
+  only: 
+    - LIVE

@@ -1,0 +1,565 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<File>
+  <Modules>
+    <Module Name="ExampleEntities">
+      <RemoveFiles Path="RG2.Entities\Address.cs"/>
+      <RemoveFiles Path="RG2.Entities\Customer.cs"/>
+      <RemoveFiles Path="RG2.Entities\Employee.cs"/>
+      <RemoveFiles Path="RG2.Entities\Order.cs"/>
+      <RemoveFiles Path="RG2.Entities\Product.cs"/>
+
+      <RemoveLine Path="RG2.Terminal\Program.cs" Line="{&quot;SO&quot;, ShowOrder},"/>
+      <RemoveLine Path="RG2.Terminal\Program.cs" From="static void ShowOrder()" To="}//ShowOrder"/>
+
+      <RemoveFiles Path="RG2.Logic\CustomerLogic.cs"/>
+      <RemoveFiles Path="RG2.Logic\EmployeeLogic.cs"/>
+      <RemoveFiles Path="RG2.Logic\OrderLogic.cs"/>
+      <RemoveFiles Path="RG2.Logic\ProductLogic.cs"/>
+      <RemoveFiles Path="RG2.Logic\ShipperLogic.cs"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="MixinDeclarations.Register&lt;OrderDetailEmbedded, OrderDetailMixin>();"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="sb.Schema.Settings.TypeAttributes&lt;OrderEntity>().Add(new SystemVersionedAttribute());"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" From="EmployeeLogic.Start(sb);" To="ShipperLogic.Start(sb);"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs"
+                  From="TypeConditionLogic.Register&lt;OrderEntity>(RG2Group.UserEntities, o => o.Employee == EmployeeEntity.Current);"
+                  To="TypeConditionLogic.Register&lt;CompanyEntity>(RG2Group.CurrentCustomer, o => o == CustomerEntity.Current);"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="CacheLogic.CacheTable&lt;ShipperEntity>(sb);"/>
+
+
+    </Module>
+
+    <Module Name="ExampleReact" DependsOn="ExampleEntities" >
+      <RemoveLine Path="RG2.React\App\RG2\RG2Client.tsx"
+                  From="import { /*RG2.Entities*/"
+                  To="} from './RG2.Entities'"/>
+      <RemoveLine Path="RG2.React\App\RG2\RG2Client.tsx"
+                  From="Navigator.addSettings(new EntitySettings(AddressEmbedded, a => import('./Templates/Address')));"
+                  To="}));//Ship"/>
+      <RemoveLine Path="RG2.React\App\RG2\RG2Client.tsx"
+                  Line="import OrderFilter from './Templates/OrderFilter'"/>
+
+      <RemoveFiles Path="RG2.React\App\RG2\Templates\Address.tsx"/>
+      <RemoveFiles Path="RG2.React\App\RG2\Templates\Category.tsx"/>
+      <RemoveFiles Path="RG2.React\App\RG2\Templates\Company.tsx"/>
+      <RemoveFiles Path="RG2.React\App\RG2\Templates\Employee.tsx"/>
+      <RemoveFiles Path="RG2.React\App\RG2\Templates\Order.tsx"/>
+      <RemoveFiles Path="RG2.React\App\RG2\Templates\OrderFilter.tsx"/>
+      <RemoveFiles Path="RG2.React\App\RG2\Templates\Person.tsx"/>
+      <RemoveFiles Path="RG2.React\App\RG2\Templates\Product.tsx"/>
+      <RemoveFiles Path="RG2.React\App\RG2\Templates\Supplier.tsx"/>
+      <RemoveLine Path="RG2.React\App\Layout.tsx"
+                  Line="&lt;LinkContainer to=&quot;~/find/order&quot;>&lt;NavDropdown.Item>Orders&lt;/NavDropdown.Item>&lt;/LinkContainer>" />"/>
+    </Module>
+
+    <Module Name="Migrations">
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="MigrationLogic.Start(sb);"/>
+      <RemoveLine Path="RG2.Terminal\Program.cs" From="if (args.Any())" To="} //if(args.Any())"/>
+      <RemoveLine Path="RG2.Terminal\Program.cs" Line="{&quot;SQL&quot;, SqlMigrationRunner.SqlMigrations},"/>
+      <RemoveLine Path="RG2.Terminal\Program.cs" Line="{&quot;CS&quot;, () => RG2Migrations.CSharpMigrations(false), &quot;C# Migrations&quot;},"/>
+      <RemoveLine Path="RG2.Terminal\RG2Migrations.cs" From="public static void CSharpMigrations(bool autoRun)" To="} //CSharpMigrations"/>
+    </Module>
+
+    <Module Name="LoadNorthwind" DependsOn="ExampleEntities,Migrations">
+      <RemoveLine Path="RG2.Terminal\RG2Migrations.cs" From="EmployeeLoader.LoadRegions," To="OrderLoader.UpdateOrdersDate,"/>
+      <RemoveFiles Path="RG2.Terminal\CustomerLoader.cs"/>
+      <RemoveFiles Path="RG2.Terminal\EmployeeLoader.cs"/>
+      <RemoveFiles Path="RG2.Terminal\NorthwindSchema.cs"/>
+      <RemoveFiles Path="RG2.Terminal\OrderLoader.cs"/>
+      <RemoveFiles Path="RG2.Terminal\ProductLoader.cs"/>
+      <RemoveFiles Path="RG2.Terminal\SupplierFaxes.csv"/>
+      <RemoveLine Path="RG2.Terminal\appsettings.json" Line="&quot;NorthwindConnectionString&quot;: &quot;Data Source=.\\SQLEXPRESS;Initial Catalog=Northwind;Integrated Security=True&quot;"/>
+    </Module>
+
+    <Module Name="UserQuery">
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="sb.Schema.Settings.FieldAttributes((UserQueryEntity uq) => uq.Owner).Replace(new ImplementedByAttribute(typeof(UserEntity), typeof(RoleEntity)));"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="UserQueryLogic.Start(sb);"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="UserQueryLogic.RegisterUserTypeCondition(sb, RG2Group.UserEntities);"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="UserQueryLogic.RegisterRoleTypeCondition(sb, RG2Group.RoleEntities);"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="UserQueryLogic.RegisterTranslatableRoutes();"/>
+      <RemoveLine Path="RG2.React\Startup.cs" Line="UserQueryServer.Start(app);"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="import * as UserQueryClient from &quot;@extensions/UserQueries/UserQueryClient&quot;"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="UserQueryClient.start({ routes });"/>
+      <RemoveLine DependsOn="Omnibox" Path="RG2.React\App\MainAdmin.tsx" Line="import UserQueryOmniboxProvider from &quot;@extensions/UserQueries/UserQueryOmniboxProvider&quot;"/>
+      <RemoveLine DependsOn="Omnibox" Path="RG2.React\App\MainAdmin.tsx" Line="new UserQueryOmniboxProvider(),"/>
+      <RemoveLine DependsOn="Omnibox" Path="RG2.React\Startup.cs" Line="new UserQueryOmniboxResultGenerator(UserQueryLogic.Autocomplete),"/>
+    </Module>
+
+    <Module Name="Word">
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="WordTemplateLogic.Start(sb);"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="import * as WordClient from &quot;@extensions/Word/WordClient&quot;"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="WordClient.start({ routes, contextual: true, queryButton: true, entityButton: false });"/>
+      <RemoveLine Path="RG2.React\Startup.cs" Line="WordServer.Start(app);"/>
+      <RemoveLine DependsOn="ExampleEntities,Migrations" Path="RG2.Terminal\RG2Migrations.cs" Line="ImportWordReportTemplateForOrder,"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.Terminal\RG2Migrations.cs" From="public static void ImportWordReportTemplateForOrder()" To="}"/>
+      <RemoveFiles DependsOn="ExampleEntities" Path="RG2.Terminal\WordTemplates\Order.docx"/>
+    </Module>
+
+    <Module Name="Chart" DependsOn="Files">
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="sb.Schema.Settings.FieldAttributes((UserChartEntity uc) => uc.Owner).Replace(new ImplementedByAttribute(typeof(UserEntity), typeof(RoleEntity)));"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="ChartLogic.Start(sb, googleMapsChartScripts: false /*requires Google Maps API key in ChartClient */);"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="UserChartLogic.RegisterUserTypeCondition(sb, RG2Group.UserEntities);"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="UserChartLogic.RegisterRoleTypeCondition(sb, RG2Group.RoleEntities);"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="UserChartLogic.RegisterTranslatableRoutes();"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="import * as ChartClient from &quot;@extensions/Chart/ChartClient&quot;"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="ChartClient.start({ routes });"/>
+      <RemoveLine DependsOn="Omnibox" Path="RG2.React\App\MainAdmin.tsx" Line="import ChartOmniboxProvider from &quot;@extensions/Chart/ChartOmniboxProvider&quot;"/>
+      <RemoveLine DependsOn="Omnibox" Path="RG2.React\App\MainAdmin.tsx" Line="import UserChartOmniboxProvider from &quot;@extensions/Chart/UserChartOmniboxProvider&quot;"/>
+      <RemoveLine DependsOn="Omnibox" Path="RG2.React\App\MainAdmin.tsx" Line="new ChartOmniboxProvider(),"/>
+      <RemoveLine DependsOn="Omnibox" Path="RG2.React\App\MainAdmin.tsx" Line="new UserChartOmniboxProvider(),"/>
+      <RemoveLine DependsOn="Omnibox" Path="RG2.React\Startup.cs" Line="new ChartOmniboxResultGenerator(),"/>
+      <RemoveLine DependsOn="Omnibox" Path="RG2.React\Startup.cs" Line="new UserChartOmniboxResultGenerator(UserChartLogic.Autocomplete),"/>
+      <RemoveLine Path="RG2.React\Startup.cs" Line="ChartServer.Start(app);"/>
+    </Module>
+
+    <Module Name="Files">
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="MixinDeclarations.Register&lt;BigStringEmbedded, BigStringMixin>();"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="ConfigureBigString(sb);"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="FilePathEmbeddedLogic.Start(sb);"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="FileLogic.Start(sb);"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="BigStringLogic.Start(sb);"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" From="public static void ConfigureBigString(SchemaBuilder sb)" To="}//ConfigureBigString"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="import * as FilesClient from &quot;@extensions/Files/FilesClient&quot;"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="FilesClient.start({ routes });"/>
+      <RemoveLine Path="RG2.React\Startup.cs" Line="FilesServer.Start(app);"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.Entities\Employee.cs" Line="public Lite&lt;FileEntity>? Photo { get; set; }"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.Entities\Product.cs" Line="public FileEmbedded? Picture { get; set; }"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.Terminal\EmployeeLoader.cs" Line="Photo = new FileEntity { FileName = e.PhotoPath.AfterLast('/'), BinaryFile = RemoveOlePrefix(e.Photo.ToArray()) }.ToLiteFat(),"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.Terminal\EmployeeLoader.cs" From="public static byte[] RemoveOlePrefix(byte[] bytes)" To="} //RemoveOlePrefix"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.Terminal\ProductLoader.cs" Line="Picture = new FileEmbedded { FileName = s.CategoryName + &quot;.jpg&quot;, BinaryFile = EmployeeLoader.RemoveOlePrefix(s.Picture.ToArray()) },"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.Logic\ProductLogic.cs" Line="s.Picture"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.Logic\EmployeeLogic.cs" Line="e.Photo, //1"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.Logic\EmployeeLogic.cs" Line="e.Photo, //2"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.React\App\RG2\RG2Client.tsx" From="{/*Files*/ }" To="{/*Files*/ }"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.React\App\RG2\Templates\Category.tsx" Line="const forceUpdate = useForceUpdate();"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.React\App\RG2\Templates\Category.tsx" Line="const maxDimensions: React.CSSProperties = { maxWidth: &quot;96px&quot;, maxHeight: &quot;96px&quot; };"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.React\App\RG2\Templates\Category.tsx" Line="&lt;FileLine ctx={ctx.subCtx(c => c.picture)} onChange={() => forceUpdate()} />"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.React\App\RG2\Templates\Category.tsx" From="&lt;div className=&quot;col-sm-3&quot;>{/*photo*/}" To="&lt;/div>{/*photo*/}"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.React\App\RG2\Templates\Employee.tsx" From="{/*photo*/}" To="{/*photo*/}"/>
+
+      <RemoveLine Path="RG2.Entities\ApplicationConfiguration.cs" From="/*Exceptions*/" To="public string ExceptionsFolder { get; set; }"/>
+      <RemoveLine Path="RG2.Entities\ApplicationConfiguration.cs" Line="public static FileTypeSymbol Exceptions;"/>
+      <RemoveLine Path="RG2.Terminal\RG2Migrations.cs" Line="ExceptionsFolder = @&quot;c:/RG2/Exceptions&quot;,"/>
+      <RemoveLine Path="RG2.Test.Environment\RG2Environment.cs" Line="ExceptionsFolder = @&quot;c:/RG2/Exceptions&quot;,"/>
+
+      <RemoveLine Path="RG2.Entities\ApplicationConfiguration.cs" From="/*OperationLog*/" To="public string OperationLogFolder { get; set; }"/>
+      <RemoveLine Path="RG2.Entities\ApplicationConfiguration.cs" Line="public static FileTypeSymbol OperationLog;"/>
+      <RemoveLine Path="RG2.Terminal\RG2Migrations.cs" Line="OperationLogFolder = @&quot;c:/RG2/OperationLog&quot;,"/>
+      <RemoveLine Path="RG2.Test.Environment\RG2Environment.cs" Line="OperationLogFolder = @&quot;c:/RG2/OperationLog&quot;,"/>
+
+      <RemoveLine DependsOn="Dashboard" Path="RG2.Entities\ApplicationConfiguration.cs" From="/*ViewLog*/" To="public string ViewLogFolder { get; set; }"/>
+      <RemoveLine DependsOn="Dashboard" Path="RG2.Entities\ApplicationConfiguration.cs" Line="public static FileTypeSymbol ViewLog;"/>
+      <RemoveLine DependsOn="Dashboard" Path="RG2.Terminal\RG2Migrations.cs" Line="ViewLogFolder = @&quot;c:/RG2/ViewLog&quot;,"/>
+      <RemoveLine DependsOn="Dashboard" Path="RG2.Test.Environment\RG2Environment.cs" Line="ViewLogFolder = @&quot;c:/RG2/ViewLog&quot;,"/>
+      <RemoveLine DependsOn="Dashboard" Path="RG2.Logic\Starter.cs" Line="FileTypeLogic.Register(BigStringFileType.ViewLog, new FileTypeAlgorithm(f => new PrefixPair(Starter.Configuration.Value.Folders.ViewLogFolder)));"/>
+      <RemoveLine DependsOn="Dashboard" Path="RG2.Logic\Starter.cs" Line="BigStringLogic.RegisterAll&lt;ViewLogEntity>(sb, new BigStringConfiguration(mode, BigStringFileType.ViewLog));"/>
+
+
+      <RemoveLine DependsOn="Mailing" Path="RG2.Entities\ApplicationConfiguration.cs" From="/*EmailMessage*/" To="public string EmailMessageFolder { get; set; }"/>
+      <RemoveLine DependsOn="Mailing" Path="RG2.Entities\ApplicationConfiguration.cs" Line="public static FileTypeSymbol EmailMessage;"/>
+      <RemoveLine DependsOn="Mailing" Path="RG2.Terminal\RG2Migrations.cs" Line="EmailMessageFolder = @&quot;c:/RG2/EmailMessage&quot;,"/>
+      <RemoveLine DependsOn="Mailing" Path="RG2.Test.Environment\RG2Environment.cs" Line="EmailMessageFolder = @&quot;c:/RG2/EmailMessage&quot;,"/>
+      <RemoveLine DependsOn="Dashboard" Path="RG2.Logic\Starter.cs" Line="FileTypeLogic.Register(BigStringFileType.EmailMessage, new FileTypeAlgorithm(f => new PrefixPair(Starter.Configuration.Value.Folders.EmailMessageFolder)));"/>
+      <RemoveLine DependsOn="Dashboard" Path="RG2.Logic\Starter.cs" Line="BigStringLogic.RegisterAll&lt;EmailMessageEntity>(sb, new BigStringConfiguration(mode, BigStringFileType.EmailMessage));"/>
+    </Module>
+
+    <Module Name="Excel">
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="import * as ExcelClient from &quot;@extensions/Excel/ExcelClient&quot;"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="ExcelClient.start({ routes, plainExcel: true, excelReport: true });"/>
+      <RemoveLine Path="RG2.React\Startup.cs" Line="ExcelServer.Start(app);"/>
+    </Module>
+
+    <Module Name="Dashboard" DependsOn="Chart,UserQuery">
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="sb.Schema.Settings.FieldAttributes((DashboardEntity cp) => cp.Owner).Replace(new ImplementedByAttribute(typeof(UserEntity), typeof(RoleEntity)));"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="DashboardLogic.Start(sb);"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="ViewLogLogic.Start(sb, new HashSet&lt;Type> { typeof(UserQueryEntity), typeof(UserChartEntity), typeof(DashboardEntity) });"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="DashboardLogic.RegisterUserTypeCondition(sb, RG2Group.UserEntities);"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="DashboardLogic.RegisterRoleTypeCondition(sb, RG2Group.RoleEntities);"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="DashboardLogic.RegisterTranslatableRoutes();"/>
+      <RemoveLine Path="RG2.React\App\Home.tsx" From="if (AuthClient.currentUser()) {" To="else //Dashboard"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="import * as DashboardClient from &quot;@extensions/Dashboard/DashboardClient&quot;"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="DashboardClient.start({ routes });"/>
+      <RemoveLine Path="RG2.React\Startup.cs" Line="DashboardServer.Start(app);"/>
+      <RemoveLine DependsOn="Omnibox" Path="RG2.React\App\MainAdmin.tsx" Line="import DashboardOmniboxProvider from &quot;@extensions/Dashboard/DashboardOmniboxProvider&quot;"/>
+      <RemoveLine DependsOn="Omnibox" Path="RG2.React\App\MainAdmin.tsx" Line="new DashboardOmniboxProvider(),"/>
+      <RemoveLine DependsOn="Omnibox" Path="RG2.React\Startup.cs" Line="new DashboardOmniboxResultGenerator(DashboardLogic.Autocomplete),"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.Terminal\UserAssets.xml" From="&lt;UserChart Guid=&quot;d681b3f5-a3a9-4228-93e9-e856f45d911a&quot; DisplayName=&quot;Evolution By Employee&quot; Query=&quot;Order&quot; HideQuickLink=&quot;false&quot; Owner=&quot;User;2&quot; ChartScript=&quot;D3ChartScript.StackedLines&quot;&gt;"  To="&lt;/Dashboard>"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.Terminal\UserAssets.xml" Line="&lt;ToolbarElement Type=&quot;Item&quot; IconName=&quot;fas fa-tachometer-alt&quot; IconColor=&quot;blue&quot; Content=&quot;7914fa80-dfd6-42a2-b29a-18e8cc5851f8&quot; />" />
+    </Module>
+
+    <Module Name="Toolbar">
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="ToolbarLogic.Start(sb);"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="ToolbarLogic.RegisterTranslatableRoutes();"/>
+      <RemoveLine Path="RG2.React\Startup.cs" Line="ToolbarServer.Start(app);"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx"
+                  From="import * as ToolbarClient from &quot;@extensions/Toolbar/ToolbarClient&quot;"
+                  To="import QueryToolbarConfig from &quot;@extensions/Toolbar/QueryToolbarConfig&quot;"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx"
+                 From="ToolbarClient.start({ routes },"
+                 To=");"/>
+      <RemoveLine DependsOn="UserQuery" Path="RG2.React\App\MainAdmin.tsx" Line="import UserQueryToolbarConfig from &quot;@extensions/UserQueries/UserQueryToolbarConfig&quot;"/>
+      <RemoveLine DependsOn="Chart" Path="RG2.React\App\MainAdmin.tsx" Line="import UserChartToolbarConfig from &quot;@extensions/Chart/UserChartToolbarConfig&quot;"/>
+      <RemoveLine DependsOn="Dashboard" Path="RG2.React\App\MainAdmin.tsx" Line="import DashboardToolbarConfig from &quot;@extensions/Dashboard/DashboardToolbarConfig&quot;"/>
+      <RemoveLine DependsOn="UserQuery" Path="RG2.React\App\MainAdmin.tsx" Line="new UserQueryToolbarConfig(),"/>
+      <RemoveLine DependsOn="Chart" Path="RG2.React\App\MainAdmin.tsx" Line="new UserChartToolbarConfig(),"/>
+      <RemoveLine DependsOn="Dashboard" Path="RG2.React\App\MainAdmin.tsx" Line="new DashboardToolbarConfig(),"/>
+      <RemoveSpanInLines Path="RG2.React\App\Layout.tsx" Span="const [sideMenuVisible] = React.useState(true);"/>
+      <RemoveLine Path="RG2.React\App\Layout.tsx" From="&lt;SidebarContainer" To="&lt;/SidebarContainer>"/>
+      <RemoveLine Path="RG2.React\App\Layout.tsx" Line="{/* Layout"/>
+      <RemoveLine Path="RG2.React\App\Layout.tsx" Line="Layout */}"/>
+      <RemoveLine Path="RG2.React\App\Layout.tsx" Line="{AuthClient.currentUser() &amp;&amp; &lt;React.Suspense fallback={null}>&lt;ToolbarRenderer location=&quot;Top&quot; />&lt;/React.Suspense>}"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.Terminal\UserAssets.xml" From="&lt;ToolbarMenu Guid=&quot;fd577065-f887-4567-8da3-9d5bcc1cedfd&quot; Name=&quot;Products&quot;>" To="&lt;/ToolbarMenu>" />
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.Terminal\UserAssets.xml" From="&lt;ToolbarMenu Guid=&quot;8b7e4ac5-cf45-41cb-8cff-4ce04506e12f&quot; Name=&quot;Employee&quot;>" To="&lt;/ToolbarMenu>" />
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.Terminal\UserAssets.xml" From="&lt;ToolbarElement Type=&quot;Item&quot; IconName=&quot;fas fa-shopping-cart&quot; IconColor=&quot;orange&quot; Content=&quot;Order&quot; />"
+                  To="&lt;ToolbarElement Type=&quot;Item&quot; IconName=&quot;fas fa-user&quot; IconColor=&quot;seagreen&quot; Content=&quot;8b7e4ac5-cf45-41cb-8cff-4ce04506e12f&quot; />" />
+      <RemoveLine DependsOn="Dynamic" Path="RG2.Terminal\UserAssets.xml" Line="&lt;ToolbarElement Type=&quot;Item&quot; Label=&quot;Dynamic Panel&quot; IconName=&quot;fas fa-arrows-alt&quot; IconColor=&quot;#9b6bcc&quot; Content=&quot;DynamicPanelPermission.ViewDynamicPanel&quot; Url=&quot;~/dynamic/panel&quot; />" />
+      <RemoveLine DependsOn="Workflow" Path="RG2.Terminal\UserAssets.xml" Line="&lt;ToolbarElement Type=&quot;Item&quot; Label=&quot;Workflow Script Runner&quot; IconName=&quot;fas fa-random&quot; IconColor=&quot;#9b6bcc&quot; Content=&quot;WorkflowPermission.ViewWorkflowPanel&quot; Url=&quot;~/workflow/panel&quot; />" />
+      <RemoveLine DependsOn="Workflow" Path="RG2.Terminal\UserAssets.xml" From="&lt;ToolbarMenu Guid=&quot;b9423939-ec3d-4495-9361-a335390d93a6&quot; Name=&quot;Workflow&quot;>" To="&lt;/ToolbarMenu>" />
+      <RemoveLine DependsOn="Workflow" Path="RG2.Terminal\UserAssets.xml" Line="&lt;ToolbarElement Type=&quot;Item&quot; IconName=&quot;fas fa-random&quot; IconColor=&quot;saddlebrown&quot; Content=&quot;b9423939-ec3d-4495-9361-a335390d93a6&quot; />" />
+      <RemoveLine Path="RG2.Terminal\UserAssets.xml" From="&lt;ToolbarMenu Guid=&quot;2deb71ea-f065-4fe3-9215-90460bc2d5ec&quot; Name=&quot;Reports&quot;>" To="&lt;/Toolbar>" />
+
+    </Module>
+
+    <Module Name="Process">
+      <RemoveLine Path="RG2.Entities\Order.cs" Line="public static ConstructSymbol&lt;ProcessEntity&gt;.FromMany&lt;OrderEntity&gt; CancelWithProcess;"/>
+      <RemoveLine Path="RG2.Entities\Order.cs" From="[AutoInit]//OrderProcess" To="}"/>
+      <RemoveLine Path="RG2.Logic\OrderLogic.cs" Line="ProcessLogic.Register(OrderProcess.CancelOrders, new CancelOrderAlgorithm());"/>
+      <RemoveLine Path="RG2.Logic\OrderLogic.cs" From="public class CancelOrderAlgorithm : PackageExecuteAlgorithm&lt;OrderEntity&gt;" To="} //CancelOrderAlgorithm"/>
+      <RemoveLine Path="RG2.Logic\OrderLogic.cs" From="new Graph&lt;ProcessEntity&gt;.ConstructFromMany&lt;OrderEntity&gt;(OrderOperation.CancelWithProcess)" To="}.Register();"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs"
+                  From="sb.Schema.Settings.FieldAttributes((PackageLineEntity cp) => cp.Package).Replace(new ImplementedByAttribute(typeof(PackageEntity), typeof(PackageOperationEntity)));"
+                  To="sb.Schema.Settings.FieldAttributes((ProcessEntity s) => s.User).Replace(new ImplementedByAttribute(typeof(UserEntity)));"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" From="ProcessLogic.Start(sb);"
+                  To="PackageLogic.Start(sb, packages: true, packageOperations: true);"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="import * as ProcessClient from &quot;@extensions/Processes/ProcessClient&quot;"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="ProcessClient.start({ routes, packages: true, packageOperations: true });"/>
+      <RemoveLine Path="RG2.React\Startup.cs" Line="ProcessRunnerLogic.StartRunningProcesses(5 * 1000);"/>
+      <RemoveLine Path="RG2.React\Startup.cs" Line="ProcessServer.Start(app);"/>
+    </Module>
+
+    <Module Name="Scheduler" DependsOn="Process">
+      <RemoveLine Path="RG2.Entities\Order.cs" From="[AutoInit]//OrderTask" To="}"/>
+      <RemoveLine Path="RG2.Logic\OrderLogic.cs" From="SimpleTaskLogic.Register(OrderTask.CancelOldOrdersWithProcess, ctx =>" To="});//CancelOldOrdersProcess"/>
+
+      <RemoveLine Path="RG2.Logic\Starter.cs"
+                  From="sb.Schema.Settings.FieldAttributes((ScheduledTaskEntity a) => a.User).Replace(new ImplementedByAttribute(typeof(UserEntity)));"
+                  To="sb.Schema.Settings.FieldAttributes((ScheduledTaskLogEntity a) => a.User).Replace(new ImplementedByAttribute(typeof(UserEntity)));"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="SchedulerLogic.Start(sb);"/>
+      <RemoveLine Path="RG2.React\Startup.cs" Line="SchedulerServer.Start(app, lifetime);"/>
+      <RemoveLine Path="RG2.React\Startup.cs" Line="SchedulerLogic.StartScheduledTasks();"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="import * as SchedulerClient from &quot;@extensions/Scheduler/SchedulerClient&quot;"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="SchedulerClient.start({ routes });"/>
+    </Module>
+
+    <Module Name="Mailing">
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="sb.Schema.Settings.FieldAttributes((EmailMessageEntity em) => em.From.EmailOwner).Replace(new ImplementedByAttribute(typeof(UserEntity)));"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="sb.Schema.Settings.FieldAttributes((EmailMessageEntity em) => em.Recipients.First().EmailOwner).Replace(new ImplementedByAttribute(typeof(UserEntity)));"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="sb.Schema.Settings.FieldAttributes((EmailSenderConfigurationEntity em) => em.DefaultFrom!.EmailOwner).Replace(new ImplementedByAttribute(typeof(UserEntity)));"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="sb.Schema.Settings.FieldAttributes((EmailSenderConfigurationEntity em) => em.AdditionalRecipients.First().EmailOwner).Replace(new ImplementedByAttribute(typeof(UserEntity)));"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="EmailLogic.Start(sb, () => Configuration.Value.Email, (template, target, message) => Configuration.Value.EmailSender);"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" From="s.Email.SendEmails," To="s.Email.UrlLeft"/>
+      <RemoveLine Path="RG2.React\Startup.cs" Line="AsyncEmailSenderLogic.StartRunningEmailSenderAsync(5 * 1000);" />
+      <RemoveLine Path="RG2.React\Startup.cs" Line="MailingServer.Start(app);" />
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="import * as MailingClient from &quot;@extensions/Mailing/MailingClient&quot;"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="MailingClient.start({ routes, pop3Config: false, sendEmailTask: false, contextual: true, queryButton: true });"/>
+      <RemoveLine Path="RG2.Entities\ApplicationConfiguration.cs" From="/*Email*/" To="public EmailSenderConfigurationEntity EmailSender { get; set; }"/>
+      <RemoveLine Path="RG2.React\App\RG2\Templates\ApplicationConfiguration.tsx" From="&lt;Tab eventKey=&quot;tab&quot; title={ctx.niceName(a => a.email)}>" To="&lt;/Tab>"/>
+      <RemoveLine Path="RG2.Terminal\RG2Migrations.cs" From="Email = new EmailConfigurationEmbedded" To="}, //Email"/>
+    </Module>
+
+    <Module Name="SMS">
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="SMSLogic.Start(sb, null, () => Configuration.Value.Sms);" />
+      <RemoveLine Path="RG2.Entities\ApplicationConfiguration.cs" From="/*Sms*/" To="public SMSConfigurationEmbedded Sms { get; set; }"/>
+      <RemoveLine Path="RG2.React\App\RG2\Templates\ApplicationConfiguration.tsx" From="&lt;Tab eventKey=&quot;sms&quot; title={ctx.niceName(a => a.sms)}>" To="&lt;/Tab>"/>
+      <RemoveLine Path="RG2.Terminal\RG2Migrations.cs" From="Sms = new SMSConfigurationEmbedded" To="}, //Sms"/>
+      <RemoveLine Path="RG2.Test.Environment\RG2Environment.cs" From="Sms = new SMSConfigurationEmbedded" To="}, //Sms"/>
+    </Module>
+
+    <Module Name="Auth">
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="AuthLogic.Start(sb, &quot;System&quot;,  &quot;Anonymous&quot;); /* null); anonymous*/"/>
+      <RemoveSpanInLines Path="RG2.Logic\Starter.cs" Span="&quot;Anonymous&quot;); /*" DependsOn="PublicCatalog"/>
+      <RemoveLine Path="RG2.Test.Environment\RG2Environment.cs" Line="CreateUser(&quot;Anonymous&quot;, roles.GetOrThrow(&quot;Anonymous&quot;));" DependsOn="PublicCatalog"/>
+      <RemoveSpanInLines Path="RG2.Entities\Product.cs" Span=", AllowUnathenticated" DependsOn="PublicCatalog"/>
+      <RemoveSpanInLines Path="RG2.Logic\Starter.cs" Span="anonymous*/" DependsOn="PublicCatalog"/>
+      <RemoveLine Path="RG2.Terminal\RG2Migrations.cs" Line="RoleEntity an = new RoleEntity() { Name = &quot;Anonymous&quot;, MergeStrategy = MergeStrategy.Union }.Save();"/>
+      <RemoveLine Path="RG2.Terminal\RG2Migrations.cs" From="UserEntity anonymous = new UserEntity" To="}.Save(); //Anonymous"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="AuthLogic.StartAllModules(sb);"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="WebAuthnLogic.Start(sb, ()=> Configuration.Value.WebAuthn);"/>
+      <RemoveSpanInLines Path="RG2.Logic\Starter.cs" Span="typeof(UserEntity),"/>
+      <RemoveSpanInLines Path="RG2.Logic\Starter.cs" Span="typeof(UserEntity)"/>
+      <RemoveSpanInLines Path="RG2.Logic\Starter.cs" Span="typeof(RoleEntity)"/>
+      <RemoveLine Path="RG2.Entities\ApplicationConfiguration.cs" From="/*Auth*/" To="public WebAuthnConfigurationEmbedded WebAuthn { get; set; }"/>
+      <RemoveLine Path="RG2.React\App\RG2\Templates\ApplicationConfiguration.tsx" From="&lt;Tab eventKey=&quot;auth&quot; title={ctx.niceName(a => a.authTokens)}>" To="&lt;/Tab>"/>
+      <RemoveLine Path="RG2.Terminal\RG2Migrations.cs" From="AuthTokens = new AuthTokenConfigurationEmbedded" To="}, //Auth"/>
+      <RemoveLine Path="RG2.React\Startup.cs" Line="AuthServer.Start(app, () => Starter.Configuration.Value.AuthTokens, &quot;IMPORTANT SECRET FROM RG2. CHANGE THIS STRING!!!&quot;);" />
+      <RemoveLine Path="RG2.Terminal\Program.cs" Line="{&quot;AR&quot;, AuthLogic.ImportExportAuthRules},"/>
+      <RemoveLine Path="RG2.Terminal\RG2Migrations.cs" Line="EmployeeLoader.CreateUsers," DependsOn="Migrations,LoadNorthwind"/>
+      <RemoveLine Path="RG2.Terminal\RG2Migrations.cs" From="CreateRoles," To="CreateSystemUser,"/>
+      <RemoveLine Path="RG2.Terminal\EmployeeLoader.cs" From="internal static void CreateUsers()" To="} //CreateUsers"/>
+      <RemoveLine Path="RG2.Terminal\RG2Migrations.cs" From="internal static void CreateRoles()" To="} //CreateSystemUser"/>
+      <RemoveLine Path="RG2.Terminal\AuthRules.xml" From="&lt;Types>" To="&lt;/Types>"  DependsOn="ExampleEntities"/>
+      <RemoveFiles Path="RG2.Entities\UserEmployeeMixin.cs" DependsOn="ExampleEntities"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="MixinDeclarations.Register&lt;UserEntity, UserEmployeeMixin&gt;();" DependsOn="ExampleEntities"/>
+      <RemoveLine Path="RG2.React\App\RG2\RG2Client.tsx"
+                 From="Navigator.getSettings(UserEntity)!.overrideView((rep) => {"
+                 To="});"
+                 DependsOn="ExampleEntities"/>
+      <RemoveSpanInLines Path="RG2.Entities\Employee.cs" Span="get { return UserEntity.Current.Mixin&lt;UserEmployeeMixin>().Employee; } //" DependsOn="ExampleEntities" />>
+      <RemoveSpanInLines Path="RG2.React\App\Layout.tsx" Span="AuthClient.currentUser() &amp;&amp;" />
+      <RemoveLine Path="RG2.React\App\Layout.tsx" Line="&lt;LoginDropdown extraButons={user => &lt;WebAuthnClient.WebAuthnRegisterMenuItem />} />"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="import * as AuthAdminClient from &quot;@extensions/Authorization/AuthAdminClient&quot;"/>
+      <RemoveSpanInLines Path="RG2.React\App\MainPublic.tsx" Span="AuthClient.autoLogin() //"/>
+      <RemoveSpanInLines Path="RG2.React\App\MainPublic.tsx" Span="Boolean(AuthClient.currentUser()) &amp;&amp; AuthClient.currentUser().userName != &quot;Anonymous&quot;; //"/>
+      <RemoveSpanInLines Path="RG2.React\App\MainPublic.tsx" Span=" &amp;&amp; AuthClient.currentUser().userName != &quot;Anonymous&quot;" DependsOn="PublicCatalog"/>
+      <RemoveLine Path="RG2.React\App\MainPublic.tsx" Line="AuthClient.startPublic({ routes, userTicket: true, windowsAuthentication: false, resetPassword: true, notifyLogout: true });"/>
+      <RemoveLine Path="RG2.React\App\MainPublic.tsx" Line="LoginPage.customLoginButtons = ctx => &lt;WebAuthnClient.WebAuthnLoginButton ctx={ctx} />;"/>
+      <RemoveLine Path="RG2.React\App\MainPublic.tsx" From="AuthClient.Options.onLogin = (url?: string) => {" To="};"/>
+      <RemoveLine Path="RG2.React\App\MainPublic.tsx" From="AuthClient.Options.onLogout = () => {" To="};"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="AuthAdminClient.start({ routes, types: true, properties: true, operations: true, queries: true, permissions: true });"/>
+      <RemoveLine Path="RG2.Test.Environment\RG2Environment.cs" From="internal static void LoadUsers()" To="}//LoadUsers"/>
+      <RemoveLine Path="RG2.Test.Environment\RG2Environment.cs" Line="user.SetMixin((UserEmployeeMixin e) => e.Employee, Database.Query&lt;EmployeeEntity>().SingleOrDefaultEx(e => e.FirstName == userName)?.ToLite());" DependsOn="ExampleEntities"/>
+      <RemoveLine Path="RG2.Test.Environment\EnvironmentTest.cs" Line="RG2Environment.LoadUsers();"/>
+      <RemoveLine Path="RG2.Test.Environment\EnvironmentTest.cs" Line="var authRules = XDocument.Load(@&quot;..\..\..\RG2.Terminal\AuthRules.xml&quot;);"/>
+      <RemoveLine Path="RG2.Test.Environment\EnvironmentTest.cs" Line="AuthLogic.LoadRoles(authRules);"/>
+      <RemoveLine Path="RG2.Test.Environment\EnvironmentTest.cs" Line="AuthLogic.ImportRulesScript(authRules, interactive: false)!.PlainSqlCommand().ExecuteLeaves();"/>
+    </Module>
+
+    <Module Name="Translation">
+      <RemoveLine Path="RG2.Logic\Starter.cs" From="TranslationLogic.Start(sb, countLocalizationHits: false);" To="TranslatedInstanceLogic.Start(sb, () => CultureInfo.GetCultureInfo(&quot;en&quot;));"/>
+      <RemoveFiles Path="RG2.Entities\Translations" DependsOn="ExampleEntities" />
+      <RemoveLine Path="RG2.React\Startup.cs" From="TranslationServer.Start(app," To="); //TranslationServer" />
+      <RemoveLine Path="RG2.React\Startup.cs" From="SignumCultureSelectorFilter.GetCurrentCulture = (ctx) => GetCulture(ctx);" To="return DefaultCulture; //Translation" />
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="import * as TranslationClient from &quot;@extensions/Translation/TranslationClient&quot;"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="import * as TranslatedInstanceClient from &quot;@extensions/Translation/TranslatedInstanceClient&quot;"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="TranslationClient.start({ routes });"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="TranslatedInstanceClient.start({ routes });"/>
+      <RemoveLine Path="RG2.React\App\MainPublic.tsx" Line="import * as CultureClient from &quot;@extensions/Translation/CultureClient&quot;"/>
+      <RemoveLine Path="RG2.React\App\MainPublic.tsx" Line=".then(() => CultureClient.loadCurrentCulture())"/>
+      <RemoveLine Path="RG2.React\App\MainPublic.tsx" Line="CultureClient.onCultureLoaded.push(ci => {"/>
+      <RemoveLine Path="RG2.React\App\MainPublic.tsx" Line="}); //Culture"/>
+      <RemoveLine Path="RG2.Terminal\Program.cs" Line="{&quot;CT&quot;, TranslationLogic.CopyTranslations},"/>
+      <RemoveSpanInLines Path="RG2.React\App\MainPublic.tsx" Span="ci.name!; //"/>
+      <RemoveLine Path="RG2.Terminal\RG2Migrations.cs" Line="ImportSpanishInstanceTranslations," DependsOn="LoadNorthwind,Migrations"/>
+      <RemoveLine Path="RG2.Terminal\RG2Migrations.cs" From="public static void ImportSpanishInstanceTranslations()" To="}" DependsOn="LoadNorthwind"/>
+      <RemoveFiles Path="RG2.Terminal\InstanceTranslations\Category.es.View.xlsx" DependsOn="LoadNorthwind"/>
+      <RemoveFiles Path="RG2.Terminal\InstanceTranslations\Dashboard.es.View.xlsx" DependsOn="LoadNorthwind,Dashboard"/>
+      <RemoveFiles Path="RG2.Terminal\InstanceTranslations\UserQuery.es.View.xlsx" DependsOn="LoadNorthwind,UserQuery"/>
+      <RemoveFiles Path="RG2.Terminal\InstanceTranslations\UserChart.es.View.xlsx" DependsOn="LoadNorthwind,Chart"/>
+      <RemoveFiles Path="RG2.Terminal\InstanceTranslations\Toolbar.es.View.xlsx" DependsOn="LoadNorthwind,Toolbar"/>
+      <RemoveFiles Path="RG2.Terminal\InstanceTranslations\ToolbarMenu.es.View.xlsx" DependsOn="LoadNorthwind,Toolbar"/>
+      <RemoveLine Path="RG2.Entities\Product.cs" Line="[TranslateField] //Localize categoryName column" DependsOn="ExampleEntities"/>
+      <RemoveLine Path="RG2.Entities\Product.cs" Line="[TranslateField] //Localize description column" DependsOn="ExampleEntities"/>
+      <RemoveLine Path="RG2.React\App\Layout.tsx" Line="&lt;CultureDropdown />"/>
+    </Module>
+
+    <Module Name="Auth_ResetPasswordRequest" DependsOn="Auth,Mailing">
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="ResetPasswordRequestLogic.Start(sb);"/>
+    </Module>
+
+    <Module Name="Auth_UserTicket" DependsOn="Auth">
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="UserTicketLogic.Start(sb);"/>
+    </Module>
+
+    <Module Name="SessionLog" DependsOn="Auth">
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="SessionLogLogic.Start(sb);"/>
+      <RemoveLine Path="RG2.Terminal\UserAssets.xml" Line="&lt;ToolbarElement Type=&quot;Item&quot; Content=&quot;SessionLog&quot; />" />
+    </Module>
+
+    <Module Name="Alerts">
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="AlertLogic.Start(sb, typeof(UserEntity), /*Alert*/typeof(OrderEntity));"/>
+      <RemoveSpanInLines Path="RG2.Logic\Starter.cs" Span=", /*Alert*/typeof(OrderEntity)" DependsOn="ExampleEntities" />
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="sb.Schema.Settings.FieldAttributes((AlertEntity a) => a.CreatedBy).Replace(new ImplementedByAttribute(typeof(UserEntity)));"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="sb.Schema.Settings.FieldAttributes((AlertEntity a) => a.AttendedBy).Replace(new ImplementedByAttribute(typeof(UserEntity)));"/>
+    </Module>
+
+    <Module Name="Notes">
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="NoteLogic.Start(sb, typeof(UserEntity), /*Note*/typeof(OrderEntity));"/>
+      <RemoveSpanInLines Path="RG2.Logic\Starter.cs" Span=", /*Note*/typeof(OrderEntity)" DependsOn="ExampleEntities" />
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="sb.Schema.Settings.FieldAttributes((NoteEntity n) => n.CreatedBy).Replace(new ImplementedByAttribute(typeof(UserEntity)));"/>
+
+    </Module>
+
+    <Module Name="Cache">
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="CacheLogic.Start(sb, cacheInvalidator: sb.Settings.IsPostgres ? new PostgresCacheInvalidation() : null);"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="SetupCache(sb);"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" From="private static void SetupCache(SchemaBuilder sb)" To="}"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="CacheClient.start({ routes });"/>
+    </Module>
+
+    <Module Name="SplitDB">
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="string? logDatabase = Connector.TryExtractDatabaseNameWithPostfix(ref connectionString, &quot;_Log&quot;);"/>
+      <RemoveSpanInLines Path="RG2.Logic\Starter.cs" Span="LogDatabaseName = logDatabase, "/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="public string? LogDatabaseName;"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" From="public Type[] InLogDatabase = new Type[]" To="};"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" From="if (this.LogDatabaseName == null)" To="return new DatabaseName(null, this.LogDatabaseName, this.Schema.Settings.IsPostgres);"/>
+    </Module>
+
+    <Module Name="PublicCatalog" DependsOn="ExampleEntities,Translation,Cache,Files">
+      <RemoveLine Path="RG2.Logic\ProductLogic.cs" Line="public static ResetLazy&lt;Dictionary&lt;CategoryEntity, List&lt;ProductEntity&gt;&gt;&gt; ActiveProducts = null!;"/>
+      <RemoveLine Path="RG2.Logic\ProductLogic.cs" From="ActiveProducts = sb.GlobalLazy(() =>" To="new InvalidateWith(typeof(ProductEntity)));"/>
+      <RemoveFiles Path="RG2.React\App\PublicCatalog.tsx"/>
+      <RemoveLine Path="RG2.React\App\Layout.tsx" Line="&lt;LinkContainer to=&quot;~/publicCatalog&quot;>&lt;NavDropdown.Item>Catalog&lt;/NavDropdown.Item>&lt;/LinkContainer>"/>
+      <RemoveLine Path="RG2.React\App\MainPublic.tsx" Line="routes.push(&lt;Route path=&quot;~/publicCatalog&quot; component={PublicCatalog} />);"/>
+      <RemoveLine Path="RG2.React\App\MainPublic.tsx" Line="import PublicCatalog from './PublicCatalog'"/>
+      <RemoveLine Path="RG2.React\App\Home.tsx" From="if (!AuthClient.currentUser()) {" To="}//PublicCatalog"/>
+      <RemoveFiles Path="RG2.React\App\RG2\CatalogController.cs"/>
+    </Module>
+
+    <Module Name="Profiler">
+      <RemoveLine Path="RG2.Logic\Starter.cs" From="ProfilerLogic.Start(sb," To="overrideSessionTimeout: true);"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="import * as ProfilerClient from &quot;@extensions/Profiler/ProfilerClient&quot;"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="ProfilerClient.start({ routes });"/>
+      <RemoveLine Path="RG2.React\Startup.cs" Line="ProfilerServer.Start(app);"/>
+    </Module>
+
+    <Module Name="Omnibox">
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="OmniboxLogic.Start(sb);"/>
+      <RemoveLine Path="RG2.React\Startup.cs" From="OmniboxServer.Start(app," To=");//Omnibox"/>
+      <RemoveLine Path="RG2.React\App\Layout.tsx" Line="{AuthClient.isPermissionAuthorized(OmniboxPermission.ViewOmnibox) &amp;&amp; &lt;OmniboxAutocomplete inputAttrs={{ className: &quot;form-control&quot; }} />}"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="import * as OmniboxClient from &quot;@extensions/Omnibox/OmniboxClient&quot;"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="import DynamicQueryOmniboxProvider from &quot;@extensions/Omnibox/DynamicQueryOmniboxProvider&quot;"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="import EntityOmniboxProvider from &quot;@extensions/Omnibox/EntityOmniboxProvider&quot;"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="import SpecialOmniboxProvider from &quot;@extensions/Omnibox/SpecialOmniboxProvider&quot;"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" From="OmniboxClient.start(" To=");//Omnibox"/>
+    </Module>
+
+    <Module Name="Map">
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="MapLogic.Start(sb);"/>
+      <RemoveLine Path="RG2.React\Startup.cs" Line="MapServer.Start(app);"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="import * as MapClient from &quot;@extensions/Map/MapClient&quot;"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="MapClient.start({ routes, auth: true, cache: true, disconnected: false, isolation: false });"/>
+      <RemoveLine DependsOn="Omnibox" Path="RG2.React\App\MainAdmin.tsx" Line="import MapOmniboxProvider from &quot;@extensions/Map/MapOmniboxProvider&quot;"/>
+      <RemoveLine DependsOn="Omnibox" Path="RG2.React\App\MainAdmin.tsx" Line="new MapOmniboxProvider(),"/>
+      <RemoveLine DependsOn="Omnibox" Path="RG2.React\Startup.cs" Line="new MapOmniboxResultGenerator(type => OperationLogic.TypeOperations(type).Any()),"/>
+    </Module>
+
+    <Module Name="Help">
+      <RemoveLine Path="RG2.Terminal\Program.cs" Line="{&quot;HL&quot;, HelpXml.ImportExportHelp},"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="HelpLogic.Start(sb);"/>
+    </Module>
+
+    <Module Name="PublicAPI">
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="RestLogLogic.Start(sb);"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="RestApiKeyLogic.Start(sb);"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="sb.Schema.Settings.FieldAttributes((RestLogEntity a) => a.User).Replace(new ImplementedByAttribute(typeof(UserEntity)));"/>
+      <RemoveLine Path="RG2.React\App\Layout.tsx" From="&lt;Nav.Item> {/*Swagger*/}" To="&lt;/Nav.Item> {/*Swagger*/}"/>
+      <RemoveLine Path="RG2.React\App\Layout.tsx" From="function handleSwaggerClick(e: React.MouseEvent&lt;any>) {" To="} //Swagger"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="import * as RestClient from &quot;@extensions/Rest/RestClient&quot;"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="RestClient.start({ routes });"/>
+      <RemoveFiles DependsOn="ExampleEntities" Path="RG2.React\PublicAPI\CatalogController.cs" />
+      <RemoveLine Path="RG2.React\Startup.cs" From="using Swashbuckle.AspNetCore.SwaggerGen;" To="using System.Net;"/>
+      <RemoveLine Path="RG2.React\Startup.cs" From="public class ErrorResponsesOperationFilter : IOperationFilter" To="} //Swagger Attributes"/>
+      <RemoveLine Path="RG2.React\Startup.cs" From="//https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-2.1&amp;tabs=visual-studio%2Cvisual-studio-xml" To="}); //Swagger Services"/>
+      <RemoveLine Path="RG2.React\Startup.cs" From="//Enable middleware to serve generated Swagger as a JSON endpoint." To="});//Swagger Configure"/>
+      <RemoveLine Path="RG2.React\Startup.cs" Line="RestServer.Start(app);"/>
+      <RemoveLine Path="RG2.React\Startup.cs" Line="RestLogServer.Start(app);"/>
+    </Module>
+
+    <Module Name="Predictor" DependsOn="Files">
+      <RemoveLine Path="RG2.Entities\ApplicationConfiguration.cs" From="/*Predictor*/" To="public string PredictorModelFolder { get; set; }"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.Terminal\RG2Migrations.cs" Line="ImportPredictor,"/>
+      <RemoveLine Path="RG2.Terminal\RG2Migrations.cs" Line="PredictorModelFolder = @&quot;c:/RG2/PredictorModels&quot;,"/>
+      <RemoveLine Path="RG2.Test.Environment\RG2Environment.cs" Line="PredictorModelFolder = @&quot;c:/RG2/PredictorModels&quot;,"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.Terminal\RG2Migrations.cs" From="public static void ImportPredictor()" To="}//ImportPredictor"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.Terminal\Program.cs" Line="{&quot;TP&quot;, TrainPredictor},"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.Terminal\Program.cs" From="static void TrainPredictor()" To="}//TrainPredictor"/>
+
+      <RemoveLine Path="RG2.Terminal\RG2.Terminal.csproj" Line="&lt;PackageReference Include=&quot;SciSharp.TensorFlow.Redist&quot; Version=&quot;2.3.1&quot; />"/>
+      <RemoveLine Path="RG2.React\RG2.React.csproj" Line="&lt;PackageReference Include=&quot;SciSharp.TensorFlow.Redist&quot; Version=&quot;2.3.1&quot; />"/>
+      "     <RemoveLine Path="RG2.Logic\RG2.Logic.csproj" Line="&lt;ProjectReference Include=&quot;..\Extensions\Signum.Engine.MachineLearning.TensorFlow\Signum.Engine.MachineLearning.TensorFlow.csproj&quot; />"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="using Signum.Engine.MachineLearning.TensorFlow;"/>
+      <RemoveSpanInLines Path="RG2.Logic\Starter.cs" Span=", typeof(PredictorEntity)"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs"
+                  From="PredictorLogic.Start(sb, () => new FileTypeAlgorithm(f => new PrefixPair(Starter.Configuration.Value.Folders.PredictorModelFolder)));"
+                  To="PredictorLogic.RegisterAlgorithm(TensorFlowPredictorAlgorithm.NeuralNetworkGraph, new TensorFlowNeuralNetworkPredictor());"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="PredictorLogic.IgnorePinned(sb);" />
+      <RemoveLine Path="RG2.Logic\Starter.cs" DependsOn="ExampleEntities" Line="PredictorLogic.RegisterPublication(ProductPredictorPublication.MonthlySales, new PublicationSettings(typeof(OrderEntity)));"/>
+      <RemoveSpanInLines Path="RG2.Logic\Starter.cs" Span=", typeof(AutoconfigureNeuralNetworkEntity)"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="import * as PredictorClient from &quot;@extensions/MachineLearning/PredictorClient&quot;"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="PredictorClient.start({ routes });"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.Entities\Product.cs" From="[AutoInit]//Predictor" To="}//Predictor"/>
+      <RemoveFiles DependsOn="ExampleEntities" Path="RG2.React\App\RG2\SalesEstimationController.cs"/>
+      <RemoveFiles DependsOn="ExampleEntities" Path="RG2.React\App\RG2\Templates\SalesEstimation.tsx"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.React\App\RG2\Templates\Product.tsx" Line="import SalesEstimation from './SalesEstimation';"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.React\App\RG2\Templates\Product.tsx" Line="{!ctx.value.isNew &amp;&amp; &lt;SalesEstimation ctx={ctx} />}"/>
+      <RemoveProjectReference Path="Extensions\Signum.Engine.MachineLearning.TensorFlow\Signum.Engine.MachineLearning.TensorFlow.csproj"/>
+      <RemoveLine Path="RG2.React\Startup.cs" Line="PredictorServer.Start(app);"/>
+    </Module>
+
+    <Module Name="Dynamic">
+      <RemoveFiles Path="RG2.Logic\DynamicLogicStarter.cs" />
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="StartParameters.IgnoredDatabaseMismatches = new List&lt;Exception>();"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="StartParameters.IgnoredCodeErrors = new List&lt;Exception>();"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" From="DynamicLogicStarter.Start(sb);" To="}//Dynamic"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" From="if (includeDynamic)//2" To="}//2"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" From="if (includeDynamic)//3" To="}//3"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" From="if (type.Namespace == DynamicCode.CodeGenEntitiesNamespace)" To="return &quot;codegen&quot;;"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx"
+                  From="import * as DynamicClient from &quot;@extensions/Dynamic/DynamicClient&quot;"
+                  To="import * as DynamicViewClient from &quot;@extensions/Dynamic/DynamicViewClient&quot;"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx"
+                  From="DynamicClient.start({ routes });"
+                  To="DynamicViewClient.start({ routes });"/>
+      <RemoveLine Path="RG2.React\Startup.cs" Line="using Signum.React.Dynamic;"/>
+      <RemoveLine Path="RG2.React\Startup.cs" Line="using Signum.Entities.Dynamic;"/>
+      <RemoveLine Path="RG2.React\Startup.cs" Line="DynamicCode.CodeGenDirectory = env.ContentRootPath + &quot;/CodeGen&quot;;"/>
+      <RemoveLine Path="RG2.React\Startup.cs" Line="DynamicServer.Start(app);"/>
+    </Module>
+
+    <Module Name="Workflow">
+      <RemoveLine Path="RG2.Entities\ApplicationConfiguration.cs" From="/*Workflow*/" To="public WorkflowConfigurationEmbedded Workflow { get; set; }"/>
+      <RemoveLine Path="RG2.Logic\Starter.cs" Line="WorkflowLogicStarter.Start(sb, () => Starter.Configuration.Value.Workflow);"/>
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="import * as WorkflowClient from &quot;@extensions/Workflow/WorkflowClient&quot;" />
+      <RemoveLine Path="RG2.React\App\MainAdmin.tsx" Line="WorkflowClient.start({ routes });"/>
+      <RemoveLine Path="RG2.React\App\Layout.tsx" Line="const WorkflowDropdown = React.lazy(() => import(&quot;@extensions/Workflow/Workflow/WorkflowDropdown&quot;));"/>
+      <RemoveLine Path="RG2.React\App\Layout.tsx" Line="{AuthClient.currentUser() &amp;&amp; &lt;React.Suspense fallback={null}>&lt;WorkflowDropdown />&lt;/React.Suspense>}"/>
+      <RemoveLine Path="RG2.React\Startup.cs" Line="WorkflowServer.Start(app);"/>
+      <RemoveLine Path="RG2.Terminal\RG2Migrations.cs" From="Workflow = new WorkflowConfigurationEmbedded" To="}, //Workflow"/>
+      <RemoveLine Path="RG2.Test.Environment\RG2Environment.cs" From="Workflow = new WorkflowConfigurationEmbedded" To="}, //Workflow"/>
+      <RemoveLine Path="RG2.React\package.json" Line="&quot;bpmn-js&quot;: &quot;7.5.0&quot;,"/>
+      <RemoveLine Path="RG2.React\package.json" Line="&quot;@types/draft-js&quot;: &quot;0.10.44&quot;,"/>
+      <RemoveLine Path="RG2.React\package.json" Line="&quot;draft-js&quot;: &quot;0.11.7&quot;,"/>
+      <RemoveLine Path="RG2.React\package.json" Line="&quot;html-to-draftjs&quot;: &quot;1.5.0&quot;,"/>
+      <RemoveLine Path="RG2.React\package.json" Line="&quot;draftjs-to-html&quot;: &quot;0.9.1&quot;,"/>
+    </Module>
+
+    <Module Name="Test.Environment">
+      <RemoveFiles Path="RG2.Test.Environment"/>
+
+      <RemoveLine DependsOn="ExampleEntities"  Path="RG2.Test.Environment\RG2Environment.cs"
+                  From="internal static void LoadEmployees()"
+                  To="} //LoadEmployees" />
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.Test.Environment\RG2Environment.cs"
+                   From="internal static void LoadProducts()"
+                   To="}//LoadShippers" />
+      <RemoveFiles DependsOn="ExampleEntities" Path="RG2.Test.Environment\RG2Extensions.cs" />
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.Test.Environment\EnvironmentTest.cs" Line="RG2Environment.LoadEmployees();"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.Test.Environment\EnvironmentTest.cs" Line="RG2Environment.LoadProducts();"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.Test.Environment\EnvironmentTest.cs" Line="RG2Environment.LoadCustomers();"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.Test.Environment\EnvironmentTest.cs" Line="RG2Environment.LoadShippers();"/>
+    </Module>
+
+    <Module Name="Test.Logic" DependsOn="Test.Environment">
+      <RemoveFiles Path="RG2.Test.Logic"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.Test.Logic\OrderTest.cs" From="[Fact]" To="}//OrderTestExample"/>
+    </Module>vp
+
+    <Module Name="Test.React" DependsOn="Test.Environment">
+      <RemoveFiles Path="RG2.Test.React"/>
+      <RemoveLine DependsOn="ExampleEntities" Path="RG2.Test.React\OrderReactTest.cs" From="[Fact]" To="}//OrderReactTestExample"/>
+      <RemoveProjectReference Path="Extensions\Signum.React.Extensions.Selenium\Signum.React.Extensions.Selenium.csproj"/>
+    </Module>
+  </Modules>
+
+  <Projects>
+    <Project Path ="RG2.Entities\RG2.Entities.csproj"/>
+    <Project Path ="RG2.Terminal\RG2.Terminal.csproj"/>
+    <Project Path ="RG2.Logic\RG2.Logic.csproj"/>
+    <Project Path ="RG2.React\RG2.React.csproj"/>
+    <Project Path ="RG2.Test.Environment\RG2.Test.Environment.csproj"/>
+    <Project Path ="RG2.Test.Logic\RG2.Test.Logic.csproj"/>
+    <Project Path ="RG2.Test.React\RG2.Test.React.csproj"/>
+  </Projects>
+
+  <Solutions>
+    <Solution Path="RG2.sln" />
+  </Solutions>
+</File>
