@@ -253,6 +253,12 @@ export interface PersonEntity extends CustomerEntity {
   corrupt: boolean;
 }
 
+export const Player = new Type<Player>("Player");
+export interface Player extends Entities.Entity {
+  Type: "Player";
+  name: string;
+}
+
 export const ProductEntity = new Type<ProductEntity>("Product");
 export interface ProductEntity extends Entities.Entity {
   Type: "Product";

@@ -16,5 +16,4 @@
     <ProjectReference Include="..\Framework\Signum.Entities\Signum.Entities.csproj" />
     <ProjectReference Include="..\Framework\Signum.Utilities\Signum.Utilities.csproj" />
   </ItemGroup>
-  <ItemGroup />
 </Project>
