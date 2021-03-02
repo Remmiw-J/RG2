@@ -81,6 +81,30 @@ export module CategoryOperation {
   export const Save : Entities.ExecuteSymbol<CategoryEntity> = registerSymbol("Operation", "CategoryOperation.Save");
 }
 
+export const Character = new Type<Character>("Character");
+export interface Character extends Entities.Entity {
+  Type: "Character";
+  name: string;
+  race: Race;
+  class: Entities.Lite<Class>;
+  spec: Entities.Lite<Spec>;
+}
+
+export module CharacterOperation {
+  export const Save : Entities.ExecuteSymbol<Character> = registerSymbol("Operation", "CharacterOperation.Save");
+}
+
+export const Class = new Type<Class>("Class");
+export interface Class extends Entities.Entity {
+  Type: "Class";
+  name: string;
+  character: Entities.Lite<Character>;
+}
+
+export module ClassOperation {
+  export const Save : Entities.ExecuteSymbol<Class> = registerSymbol("Operation", "ClassOperation.Save");
+}
+
 export const CompanyEntity = new Type<CompanyEntity>("Company");
 export interface CompanyEntity extends CustomerEntity {
   Type: "Company";
@@ -142,21 +166,9 @@ export interface FoldersConfigurationEmbedded extends Entities.EmbeddedEntity {
 export const Item = new Type<Item>("Item");
 export interface Item extends Entities.Entity {
   Type: "Item";
-  createdOn: string;
-  description: string | null;
   name: string;
-  itemCatagories: Entities.MList<ItemCategory>;
-}
-
-export const ItemCategory = new Type<ItemCategory>("ItemCategory");
-export interface ItemCategory extends Entities.Entity {
-  Type: "ItemCategory";
-  name: string;
-  item: Entities.Lite<Item> | null;
-}
-
-export module ItemCategoryOperation {
-  export const Save : Entities.ExecuteSymbol<ItemCategory> = registerSymbol("Operation", "ItemCategoryOperation.Save");
+  itemId: number;
+  fromRaid: Entities.Lite<Raid>;
 }
 
 export module ItemOperation {
@@ -257,6 +269,13 @@ export const Player = new Type<Player>("Player");
 export interface Player extends Entities.Entity {
   Type: "Player";
   name: string;
+  characters: Entities.MList<Character>;
+  joinedOn: string;
+  attendance: number;
+}
+
+export module PlayerOperation {
+  export const Save : Entities.ExecuteSymbol<Player> = registerSymbol("Operation", "PlayerOperation.Save");
 }
 
 export const ProductEntity = new Type<ProductEntity>("Product");
@@ -279,6 +298,24 @@ export module ProductOperation {
 
 export module ProductQuery {
   export const CurrentProducts = new QueryKey("ProductQuery", "CurrentProducts");
+}
+
+export const Race = new EnumType<Race>("Race");
+export type Race =
+  "Tauren" |
+  "Orc" |
+  "Troll" |
+  "Undead" |
+  "Bloodelf";
+
+export const Raid = new Type<Raid>("Raid");
+export interface Raid extends Entities.Entity {
+  Type: "Raid";
+  name: string;
+}
+
+export module RaidOperation {
+  export const Save : Entities.ExecuteSymbol<Raid> = registerSymbol("Operation", "RaidOperation.Save");
 }
 
 export const RegionEntity = new Type<RegionEntity>("Region");
@@ -306,6 +343,17 @@ export interface ShipperEntity extends Entities.Entity {
 
 export module ShipperOperation {
   export const Save : Entities.ExecuteSymbol<ShipperEntity> = registerSymbol("Operation", "ShipperOperation.Save");
+}
+
+export const Spec = new Type<Spec>("Spec");
+export interface Spec extends Entities.Entity {
+  Type: "Spec";
+  name: string;
+  class: Entities.Lite<Class>;
+}
+
+export module SpecOperation {
+  export const Save : Entities.ExecuteSymbol<Spec> = registerSymbol("Operation", "SpecOperation.Save");
 }
 
 export const SupplierEntity = new Type<SupplierEntity>("Supplier");
@@ -348,6 +396,18 @@ export interface UserEmployeeMixin extends Entities.MixinEntity {
   Type: "UserEmployeeMixin";
   allowLogin: AllowLogin;
   employee: Entities.Lite<EmployeeEntity> | null;
+}
+
+export const WishItem = new Type<WishItem>("WishItem");
+export interface WishItem extends Entities.Entity {
+  Type: "WishItem";
+  item: Entities.Lite<Item>;
+  priorityNumber: number;
+  ofPlayer: Entities.Lite<Player>;
+}
+
+export module WishItemOperation {
+  export const Save : Entities.ExecuteSymbol<WishItem> = registerSymbol("Operation", "WishItemOperation.Save");
 }
 
 

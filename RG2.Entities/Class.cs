@@ -12,22 +12,21 @@ using Signum.Entities.Disconnected;
 using Signum.Entities.Scheduler;
 using Signum.Entities.Processes;
 using Signum.Utilities.ExpressionTrees;
-    
-    namespace RG2.Entities
+
+
+namespace RG2.Entities
 {
     [Serializable, EntityKind(EntityKind.Main, EntityData.Transactional)]
-    public class Player : Entity
+    public class Class : Entity
     {
+        [StringLengthValidator(Min = 2, Max = 25)]
         public string Name { get; set; }
-        public MList<Character> Characters { get; set; } = new MList<Character>();
-        public DateTime JoinedOn { get; set; } = TimeZoneManager.Now;
-        public int Attendance { get; set; }
-
+        public Lite<Character> Character { get; set; }
     }
 
     [AutoInit]
-    public static class PlayerOperation
+    public static class ClassOperation
     {
-        public static ExecuteSymbol<Player> Save;
+        public static ExecuteSymbol<Class> Save;
     }
 }

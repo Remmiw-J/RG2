@@ -11,23 +11,22 @@ using Signum.Engine.DynamicQuery;
 
 namespace RG2.Logic
 {
-    public static class ItemLogic
+    public static class ClassLogic
     {
         public static void Start(SchemaBuilder sb)
         {
             if (sb.NotDefined(MethodInfo.GetCurrentMethod()))
             {
-                sb.Include<Item>()
-                    .WithSave(ItemOperation.Save)
+                sb.Include<Class>()
+                    .WithSave(ClassOperation.Save)
                     .WithQuery(() => e => new
                     {
                         Entity = e,
                         e.Id,
                         e.Name,
-                        e.ItemId,
-                        e.FromRaid
+                        e.Character
                     });
-            } 
+            }
         }
     }
 }

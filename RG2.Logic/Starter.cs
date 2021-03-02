@@ -191,7 +191,12 @@ namespace RG2.Logic
                 OrderLogic.Start(sb);
                 ShipperLogic.Start(sb);
                 ItemLogic.Start(sb);
-                ItemCategoryLogic.Start(sb);
+                CharacterLogic.Start(sb);
+                ClassLogic.Start(sb);
+                PlayerLogic.Start(sb);
+                RaidLogic.Start(sb);
+                SpecLogic.Start(sb);
+                WishItemLogic.Start(sb);
 
                 StartRG2Configuration(sb);
 

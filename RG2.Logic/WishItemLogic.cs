@@ -11,25 +11,23 @@ using Signum.Engine.DynamicQuery;
 
 namespace RG2.Logic
 {
-    public static class ItemCategoryLogic
+    public static class WishItemLogic
     {
         public static void Start(SchemaBuilder sb)
         {
             if (sb.NotDefined(MethodInfo.GetCurrentMethod()))
             {
-                sb.Include<ItemCategory>()
-                    .WithSave(ItemCategoryOperation.Save)
+                sb.Include<WishItem>()
+                    .WithSave(WishItemOperation.Save)
                     .WithQuery(() => e => new
                     {
                         Entity = e,
                         e.Id,
-                        e.Name
+                        e.Item,
+                        e.PriorityNumber,
+                        e.OfPlayer
                     });
             }
         }
-
-
-
-
     }
 }

@@ -16,9 +16,20 @@ using Signum.Utilities.ExpressionTrees;
 namespace RG2.Entities
 {
     [Serializable, EntityKind(EntityKind.Main, EntityData.Transactional)]
-    class Item : Entity
+    public class Item : Entity
     {
+        [StringLengthValidator(Min = 2, Max = 100)]
+        public string Name { get; set; }
 
+        public int ItemId { get; set; }
 
+        public Lite<Raid> FromRaid { get; set; }
+
+    }
+
+    [AutoInit]
+    public static class ItemOperation
+    {
+        public static ExecuteSymbol<Item> Save;
     }
 }
