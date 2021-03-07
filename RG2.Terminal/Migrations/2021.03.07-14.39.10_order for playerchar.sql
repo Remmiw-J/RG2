@@ -1,0 +1,3 @@
+﻿ALTER TABLE dbo.PlayerCharacters ADD [Order] INT NOT NULL CONSTRAINT DF_TEMP_Order DEFAULT 0;
+ALTER TABLE dbo.PlayerCharacters DROP CONSTRAINT DF_TEMP_Order;
+GO

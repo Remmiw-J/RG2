@@ -1,0 +1,1 @@
+﻿ALTER TABLE dbo.Player ALTER COLUMN Attendance INT NULL;

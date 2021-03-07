@@ -24,7 +24,6 @@ namespace RG2.Logic
                         Entity = e,
                         e.Id,
                         e.Name,
-                        e.Character
                     });
             }
         }

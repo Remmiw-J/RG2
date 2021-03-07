@@ -15,7 +15,7 @@ using Signum.Utilities.ExpressionTrees;
 
 namespace RG2.Entities
 {
-    [Serializable, EntityKind(EntityKind.Main, EntityData.Transactional)]
+    [Serializable, EntityKind(EntityKind.Main, EntityData.Master)]
     public class Character : Entity
     {
         [StringLengthValidator(Min = 2, Max = 12)]
@@ -26,6 +26,7 @@ namespace RG2.Entities
         public Race Race { get; set; }
         public Lite<Class> Class { get; set; }
         public Lite<Spec> Spec { get; set; }
+        public Lite<Player>? Player { get; set; }
     }
 
     public enum Race
@@ -41,5 +42,6 @@ namespace RG2.Entities
     public static class CharacterOperation
     {
         public static ExecuteSymbol<Character> Save;
+        public static DeleteSymbol<Character> Delete;
     }
 }

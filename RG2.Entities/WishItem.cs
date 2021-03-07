@@ -15,12 +15,13 @@ using Signum.Utilities.ExpressionTrees;
 
 namespace RG2.Entities
 {
-    [Serializable, EntityKind(EntityKind.Main, EntityData.Transactional)]
+    [Serializable, EntityKind(EntityKind.Main, EntityData.Master)]
     public class WishItem : Entity
     {
         public Lite<Item> Item { get; set; }
         public int PriorityNumber { get; set; }
         public Lite<Player> OfPlayer  { get; set; }
+
     }
 
     [AutoInit]

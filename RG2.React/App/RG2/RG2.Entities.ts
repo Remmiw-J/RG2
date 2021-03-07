@@ -88,17 +88,18 @@ export interface Character extends Entities.Entity {
   race: Race;
   class: Entities.Lite<Class>;
   spec: Entities.Lite<Spec>;
+  player: Entities.Lite<Player> | null;
 }
 
 export module CharacterOperation {
   export const Save : Entities.ExecuteSymbol<Character> = registerSymbol("Operation", "CharacterOperation.Save");
+  export const Delete : Entities.DeleteSymbol<Character> = registerSymbol("Operation", "CharacterOperation.Delete");
 }
 
 export const Class = new Type<Class>("Class");
 export interface Class extends Entities.Entity {
   Type: "Class";
   name: string;
-  character: Entities.Lite<Character>;
 }
 
 export module ClassOperation {
@@ -269,13 +270,14 @@ export const Player = new Type<Player>("Player");
 export interface Player extends Entities.Entity {
   Type: "Player";
   name: string;
-  characters: Entities.MList<Character>;
+  characters: Entities.Lite<Character> | null;
   joinedOn: string;
-  attendance: number;
+  attendance: number | null;
 }
 
 export module PlayerOperation {
   export const Save : Entities.ExecuteSymbol<Player> = registerSymbol("Operation", "PlayerOperation.Save");
+  export const Delete : Entities.DeleteSymbol<Player> = registerSymbol("Operation", "PlayerOperation.Delete");
 }
 
 export const ProductEntity = new Type<ProductEntity>("Product");

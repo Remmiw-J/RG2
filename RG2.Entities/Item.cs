@@ -15,7 +15,7 @@ using Signum.Utilities.ExpressionTrees;
 
 namespace RG2.Entities
 {
-    [Serializable, EntityKind(EntityKind.Main, EntityData.Transactional)]
+    [Serializable, EntityKind(EntityKind.Main, EntityData.Master)]
     public class Item : Entity
     {
         [StringLengthValidator(Min = 2, Max = 100)]
@@ -24,6 +24,9 @@ namespace RG2.Entities
         public int ItemId { get; set; }
 
         public Lite<Raid> FromRaid { get; set; }
+
+        [AutoExpressionField]
+        public override string ToString() => As.Expression(() => Name);
 
     }
 

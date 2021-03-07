@@ -25,7 +25,8 @@ namespace RG2.Logic
                         e.Id,
                         e.Name,
                         e.Race,
-                        e.Spec
+                        e.Spec,
+                        e.Player
                     });
             }
         }

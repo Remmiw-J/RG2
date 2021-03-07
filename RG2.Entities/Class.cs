@@ -16,12 +16,14 @@ using Signum.Utilities.ExpressionTrees;
 
 namespace RG2.Entities
 {
-    [Serializable, EntityKind(EntityKind.Main, EntityData.Transactional)]
+    [Serializable, EntityKind(EntityKind.Main, EntityData.Master)]
     public class Class : Entity
     {
         [StringLengthValidator(Min = 2, Max = 25)]
         public string Name { get; set; }
-        public Lite<Character> Character { get; set; }
+
+        [AutoExpressionField]
+        public override string ToString() => As.Expression(() => Name);
     }
 
     [AutoInit]

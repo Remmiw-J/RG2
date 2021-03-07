@@ -15,13 +15,19 @@ using Signum.Utilities.ExpressionTrees;
     
     namespace RG2.Entities
 {
-    [Serializable, EntityKind(EntityKind.Main, EntityData.Transactional)]
+    [Serializable, EntityKind(EntityKind.Main, EntityData.Master)]
     public class Player : Entity
     {
         public string Name { get; set; }
-        public MList<Character> Characters { get; set; } = new MList<Character>();
+
+        [NotifyChildProperty, NotifyCollectionChanged]
+        [NoRepeatValidator, PreserveOrder]
+        public Lite<Character>? Characters { get; set; }
         public DateTime JoinedOn { get; set; } = TimeZoneManager.Now;
-        public int Attendance { get; set; }
+        public int? Attendance { get; set; }
+
+        [AutoExpressionField]
+        public override string ToString() => As.Expression(() => Name);
 
     }
 
@@ -29,5 +35,6 @@ using Signum.Utilities.ExpressionTrees;
     public static class PlayerOperation
     {
         public static ExecuteSymbol<Player> Save;
+        public static DeleteSymbol<Player> Delete;
     }
 }
